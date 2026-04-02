@@ -6,8 +6,32 @@ import { createTaskSlice, TaskSlice } from './slices/task-slice'
 import { createAgentSlice, AgentSlice } from './slices/agent-slice'
 import { createUiSlice, UiSlice } from './slices/ui-slice'
 import { createAuthSlice, AuthSlice } from './slices/auth-slice'
+import { createNotificationSlice, NotificationSlice } from './slices/notification-slice'
+import { createConfigSlice, ConfigSlice } from './slices/config-slice'
+import { createChatSlice, ChatSlice } from './slices/chat-slice'
+import { createOrgSlice, OrgSlice } from './slices/org-slice'
+import { createSessionSlice, SessionSlice } from './slices/session-slice'
+import { createApprovalSlice, ApprovalSlice } from './slices/approval-slice'
+import { createLogSlice, LogSlice } from './slices/log-slice'
+import { createSpawnSlice, SpawnSlice } from './slices/spawn-slice'
+import { createTokenSlice, TokenSlice } from './slices/token-slice'
+import { createActivitySlice, ActivitySlice } from './slices/activity-slice'
 
-export type MissionControlStore = TaskSlice & AgentSlice & UiSlice & AuthSlice
+export type MissionControlStore =
+  TaskSlice &
+  AgentSlice &
+  UiSlice &
+  AuthSlice &
+  NotificationSlice &
+  ConfigSlice &
+  ChatSlice &
+  OrgSlice &
+  SessionSlice &
+  ApprovalSlice &
+  LogSlice &
+  SpawnSlice &
+  TokenSlice &
+  ActivitySlice
 
 export const useMissionControl = create<MissionControlStore>()(
   subscribeWithSelector((...a) => ({
@@ -15,6 +39,16 @@ export const useMissionControl = create<MissionControlStore>()(
     ...createAgentSlice(...a),
     ...createUiSlice(...a),
     ...createAuthSlice(...a),
+    ...createNotificationSlice(...a),
+    ...createConfigSlice(...a),
+    ...createChatSlice(...a),
+    ...createOrgSlice(...a),
+    ...createSessionSlice(...a),
+    ...createApprovalSlice(...a),
+    ...createLogSlice(...a),
+    ...createSpawnSlice(...a),
+    ...createTokenSlice(...a),
+    ...createActivitySlice(...a),
   }))
 )
 

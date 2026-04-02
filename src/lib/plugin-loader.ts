@@ -1,12 +1,15 @@
 /**
  * Plugin Loader
  */
+import { initCorePanels } from './core-panels'
 import { initJulesPlugin } from '@/plugins/jules-clone'
 
 export function loadPlugins(): void {
-  // Initialize registered plugins
+  // 1. Initialize core system panels
+  initCorePanels()
+
+  // 2. Initialize extension plugins
   initJulesPlugin()
 
-  // Potential for dynamic loading based on env or DB settings
-  console.log('Core plugins loaded')
+  console.log('All panels and plugins initialized')
 }
