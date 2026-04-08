@@ -1,7 +1,10 @@
 /**
  * Mission Control Entry Point
- * Exports the core store and entities.
+ *
+ * This is the primary API surface for external consumption.
+ * It provides access to the state store and domain entities.
  */
 
 export * from './store';
-export * from './types/entities';
+export { AgentService } from './lib/services/agent-service';
+export { pluginRegistry } from './lib/plugins';

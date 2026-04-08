@@ -1,11 +1,11 @@
 'use client'
 
-import { createElement, useEffect, useMemo } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { useMemo, useEffect, Suspense } from 'react'
+import { usePathname } from 'next/navigation'
 import { NavRail } from '@/components/layout/nav-rail'
 import { HeaderBar } from '@/components/layout/header-bar'
 import { LiveFeed } from '@/components/layout/live-feed'
-import { getPanel } from '@/lib/plugins'
+import { pluginRegistry } from '@/lib/plugins'
 import { useMissionControl } from '@/store'
 import { useTranslations } from 'next-intl'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
@@ -23,10 +23,7 @@ export default function UnifiedPage() {
     bootComplete,
     setBootComplete,
     liveFeedOpen,
-    showOnboarding,
-    updateAvailable,
-    openclawUpdate,
-    doctorDismissedAt
+    showOnboarding
   } = useMissionControl()
   const tp = useTranslations('page')
 
@@ -42,7 +39,7 @@ export default function UnifiedPage() {
     }
   }, [bootComplete, setBootComplete])
 
-  const PanelComponent = getPanel(tab)
+  const PanelComponent = pluginRegistry.getPanel(tab)
   const isLocal = dashboardMode === 'local'
 
   // Panels that REQUIRE gateway mode
@@ -72,16 +69,18 @@ export default function UnifiedPage() {
 
           <div className="flex-1 overflow-y-auto overflow-x-hidden">
             <ErrorBoundary>
-              {isRestricted ? (
-                <LocalModeUnavailable panel={tab} />
-              ) : PanelComponent ? (
-                createElement(PanelComponent)
-              ) : (
-                <div className="p-8">
-                  <h1 className="text-xl font-bold">Panel Not Registered: {tab}</h1>
-                  <p className="text-muted-foreground">Please ensure the plugin for "{tab}" is properly initialized.</p>
-                </div>
-              )}
+              <Suspense fallback={<div className="p-8 flex justify-center"><Loader size="md" /></div>}>
+                {isRestricted ? (
+                  <LocalModeUnavailable panel={tab} />
+                ) : PanelComponent ? (
+                  <PanelComponent />
+                ) : (
+                  <div className="p-8">
+                    <h1 className="text-xl font-bold">Panel Not Registered: {tab}</h1>
+                    <p className="text-muted-foreground">Please ensure the plugin for "{tab}" is properly initialized.</p>
+                  </div>
+                )}
+              </Suspense>
             </ErrorBoundary>
           </div>
         </div>

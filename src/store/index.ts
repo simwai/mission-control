@@ -17,6 +17,9 @@ import { createSpawnSlice, SpawnSlice } from './slices/spawn-slice'
 import { createTokenSlice, TokenSlice } from './slices/token-slice'
 import { createActivitySlice, ActivitySlice } from './slices/activity-slice'
 
+/**
+ * Base Mission Control Store
+ */
 export type MissionControlStore =
   TaskSlice &
   AgentSlice &
@@ -31,7 +34,9 @@ export type MissionControlStore =
   LogSlice &
   SpawnSlice &
   TokenSlice &
-  ActivitySlice
+  ActivitySlice &
+  { plugins: Record<string, any> } // Dynamic plugin state area
+  registerPluginState: (id: string, initialState: any) => void
 
 export const useMissionControl = create<MissionControlStore>()(
   subscribeWithSelector((...a) => ({
@@ -49,6 +54,15 @@ export const useMissionControl = create<MissionControlStore>()(
     ...createSpawnSlice(...a),
     ...createTokenSlice(...a),
     ...createActivitySlice(...a),
+    plugins: {},
+
+    // Action for plugins to inject their own state/actions
+    registerPluginState: (id: string, initialState: any) => {
+      const set = a[0]
+      set((state: any) => ({
+        plugins: { ...state.plugins, [id]: initialState }
+      }))
+    }
   }))
 )
 

@@ -1,28 +1,20 @@
-/**
- * Plugin Loader
- *
- * Implements a dynamic registration pattern where plugins provide
- * metadata and an init interface.
- */
 import { initCorePanels } from './core-panels'
-import { registerPlugin, getRegisteredPlugins } from './plugins'
-import { JulesPlugin } from '@/plugins/jules-clone'
+import { scanAndLoadPlugins } from './plugins/scanner'
+import { pluginRegistry } from './plugins/registry'
 
 export function loadPlugins(): void {
-  // 1. Register core system panels (non-plugin)
+  // 1. Initialize core system panels
   initCorePanels()
 
-  // 2. Register available plugins
-  registerPlugin(JulesPlugin)
+  // 2. Discover and register dynamic plugins
+  scanAndLoadPlugins()
 
-  // 3. Initialize all registered plugins
-  const plugins = getRegisteredPlugins()
-  for (const plugin of plugins) {
-    try {
-      plugin.init()
-      console.log(`Plugin "${plugin.metadata.name}" (v${plugin.metadata.version}) initialized.`)
-    } catch (err) {
-      console.error(`Failed to initialize plugin "${plugin.metadata.id}":`, err)
-    }
+  // 3. Trigger client-side initialization
+  if (typeof window !== 'undefined') {
+    pluginRegistry.getAllPlugins().forEach(plugin => {
+      if (plugin.onClientInit) plugin.onClientInit()
+    })
   }
+
+  console.log('Plugin loading sequence complete.')
 }

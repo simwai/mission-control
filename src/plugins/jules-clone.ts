@@ -1,60 +1,62 @@
-/**
- * Jules Clone Plugin
- */
-import { registerPanel, registerNavItems, MissionControlPlugin } from '@/lib/plugins'
-import { registerAgentTemplate } from '@/lib/agent-templates'
-import { createElement } from 'react'
+import { MissionControlPlugin } from '@/lib/plugins/types'
+import { lazy } from 'react'
 import { useMissionControl } from '@/store'
+import { registerAgentTemplate } from '@/lib/agent-templates'
 
-function JulesDashboard() {
-  const { agents, tasks } = useMissionControl()
-
-  return createElement('div', { className: 'p-8 space-y-6' },
-    createElement('div', { className: 'flex items-center gap-3' },
-      createElement('span', { className: 'text-3xl' }, '🧪'),
-      createElement('h1', { className: 'text-2xl font-bold' }, 'Jules AI Developer')
-    ),
-    createElement('p', { className: 'text-muted-foreground' },
-      `Jules mode active. Monitoring ${agents.length} agents across ${tasks.length} tasks.`)
-  )
-}
+// Lazy loaded dashboard
+const JulesDashboard = lazy(() => import('./jules-dashboard'))
 
 export const JulesPlugin: MissionControlPlugin = {
   metadata: {
     id: 'jules',
     name: 'Jules AI Developer',
-    version: '1.0.0',
-    description: 'Autonomous coding workflow extension.',
+    version: '2.1.0',
+    description: 'High-autonomy autonomous developer extension.',
     author: 'Builderz Labs'
   },
-  init: () => {
-    // 1. Register UI
-    registerPanel('jules', JulesDashboard)
 
-    // 2. Register Navigation
-    registerNavItems([
-      {
-        id: 'jules',
-        label: 'Jules AI',
-        groupId: 'automate',
-        icon: '🧪'
+  panels: {
+    'jules': JulesDashboard
+  },
+
+  navItems: [
+    {
+      id: 'jules',
+      label: 'Jules AI',
+      groupId: 'automate',
+      icon: '🧪'
+    }
+  ],
+
+  onClientInit: () => {
+    const { registerPluginState } = useMissionControl.getState()
+
+    // Inject specialized state for Jules
+    registerPluginState('jules', {
+      autonomyLevel: 'high',
+      lastAction: 'Repository mapping completed',
+      diagnostics: {
+        gitStatus: 'clean',
+        buildStatus: 'passing'
       }
-    ])
+    })
 
-    // 3. Register specialized Agent Template
+    // Register the agent template dynamically
     registerAgentTemplate({
       type: 'jules-clone',
       label: 'Jules (AI Developer)',
-      description: 'High-autonomy developer agent with deep repo context.',
+      description: 'The ultimate autonomous coding agent.',
       emoji: '🧪',
       modelTier: 'sonnet',
-      toolCount: 25,
+      toolCount: 28,
       config: {
         model: { primary: 'anthropic/claude-3-5-sonnet-latest', fallbacks: [] },
-        identity: { name: '', theme: 'jules developer', emoji: '🧪' },
+        identity: { name: 'Jules', theme: 'autonomous developer', emoji: '🧪' },
         sandbox: { mode: 'all', workspaceAccess: 'rw', scope: 'agent' },
         tools: { allow: ['*'], deny: [] },
       }
     })
+
+    console.log('Jules Plugin: Dynamic state and template registered.')
   }
 }
