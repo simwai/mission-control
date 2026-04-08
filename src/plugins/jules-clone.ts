@@ -1,8 +1,8 @@
 /**
  * Jules Clone Plugin
- * Implements high-autonomy coding workflows.
  */
 import { registerPanel, registerNavItems, MissionControlPlugin } from '@/lib/plugins'
+import { registerAgentTemplate } from '@/lib/agent-templates'
 import { createElement } from 'react'
 import { useMissionControl } from '@/store'
 
@@ -14,18 +14,8 @@ function JulesDashboard() {
       createElement('span', { className: 'text-3xl' }, '🧪'),
       createElement('h1', { className: 'text-2xl font-bold' }, 'Jules AI Developer')
     ),
-    createElement('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-4' },
-      createElement('div', { className: 'p-4 rounded-lg border bg-card' },
-        createElement('h2', { className: 'font-semibold mb-2' }, 'Status'),
-        createElement('p', { className: 'text-sm text-muted-foreground' },
-          `Monitoring ${agents.length} agents and ${tasks.length} tasks for autonomous optimization.`)
-      ),
-      createElement('div', { className: 'p-4 rounded-lg border bg-card' },
-        createElement('h2', { className: 'font-semibold mb-2' }, 'Context'),
-        createElement('p', { className: 'text-sm text-muted-foreground' },
-          'Repository mapping: 100% complete. Ready for high-autonomy coding tasks.')
-      )
-    )
+    createElement('p', { className: 'text-muted-foreground' },
+      `Jules mode active. Monitoring ${agents.length} agents across ${tasks.length} tasks.`)
   )
 }
 
@@ -34,14 +24,14 @@ export const JulesPlugin: MissionControlPlugin = {
     id: 'jules',
     name: 'Jules AI Developer',
     version: '1.0.0',
-    description: 'Autonomous coding workflow and dashboard extension.',
+    description: 'Autonomous coding workflow extension.',
     author: 'Builderz Labs'
   },
   init: () => {
-    // Register UI
+    // 1. Register UI
     registerPanel('jules', JulesDashboard)
 
-    // Register Navigation
+    // 2. Register Navigation
     registerNavItems([
       {
         id: 'jules',
@@ -50,5 +40,21 @@ export const JulesPlugin: MissionControlPlugin = {
         icon: '🧪'
       }
     ])
+
+    // 3. Register specialized Agent Template
+    registerAgentTemplate({
+      type: 'jules-clone',
+      label: 'Jules (AI Developer)',
+      description: 'High-autonomy developer agent with deep repo context.',
+      emoji: '🧪',
+      modelTier: 'sonnet',
+      toolCount: 25,
+      config: {
+        model: { primary: 'anthropic/claude-3-5-sonnet-latest', fallbacks: [] },
+        identity: { name: '', theme: 'jules developer', emoji: '🧪' },
+        sandbox: { mode: 'all', workspaceAccess: 'rw', scope: 'agent' },
+        tools: { allow: ['*'], deny: [] },
+      }
+    })
   }
 }
