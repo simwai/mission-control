@@ -1,34 +1,28 @@
 /**
- * Plugin Registry
- *
- * Module-scoped registries following the existing register*() pattern
- * (see registerAuthResolver in auth.ts, registerMigrations in migrations.ts).
- *
- * Plugins call register* functions at init time to extend integrations,
- * categories, nav items, panels, and tool providers.
+ * Unified Plugin & Panel Registry
  */
-
 import type { ComponentType } from 'react'
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
+export interface PluginMetadata {
+  id: string
+  name: string
+  version: string
+  description?: string
+  author?: string
+}
+
+export interface MissionControlPlugin {
+  metadata: PluginMetadata
+  init: () => void | Promise<void>
+}
 
 export interface PluginIntegrationDef {
   id: string
   name: string
   category: string
   envVars: string[]
-  vaultItem?: string
   testable?: boolean
-  recommendation?: string
   testHandler?: (envMap: Map<string, string>) => Promise<{ ok: boolean; detail: string }>
-}
-
-export interface PluginCategory {
-  id: string
-  label: string
-  order: number
 }
 
 export interface PluginNavItem {
@@ -39,83 +33,46 @@ export interface PluginNavItem {
   gatewayOnly?: boolean
 }
 
-export interface PluginToolProvider {
-  id: string
-  name: string
-  tools: string[]
-  requiredIntegration?: string
-}
-
-// ---------------------------------------------------------------------------
-// Registries (module-scoped)
-// ---------------------------------------------------------------------------
-
 const _integrations: PluginIntegrationDef[] = []
-const _categories: PluginCategory[] = []
 const _navItems: PluginNavItem[] = []
 const _panels: Map<string, ComponentType> = new Map()
-const _toolProviders: PluginToolProvider[] = []
-
-// ---------------------------------------------------------------------------
-// Integration registry
-// ---------------------------------------------------------------------------
-
-export function registerIntegrations(defs: PluginIntegrationDef[]): void {
-  _integrations.push(...defs)
-}
-
-export function getPluginIntegrations(): PluginIntegrationDef[] {
-  return _integrations
-}
-
-// ---------------------------------------------------------------------------
-// Category registry
-// ---------------------------------------------------------------------------
-
-export function registerCategories(cats: PluginCategory[]): void {
-  _categories.push(...cats)
-}
-
-export function getPluginCategories(): PluginCategory[] {
-  return _categories
-}
-
-// ---------------------------------------------------------------------------
-// Nav item registry
-// ---------------------------------------------------------------------------
-
-export function registerNavItems(items: PluginNavItem[]): void {
-  _navItems.push(...items)
-}
-
-export function getPluginNavItems(): PluginNavItem[] {
-  return _navItems
-}
-
-// ---------------------------------------------------------------------------
-// Panel registry
-// ---------------------------------------------------------------------------
+const _registeredPlugins: Map<string, MissionControlPlugin> = new Map()
 
 export function registerPanel(id: string, component: ComponentType): void {
   _panels.set(id, component)
 }
 
-export function getPluginPanel(id: string): ComponentType | undefined {
+export function getPanel(id: string): ComponentType | undefined {
   return _panels.get(id)
 }
 
-export function getPluginPanelIds(): string[] {
-  return Array.from(_panels.keys())
+export function registerNavItems(items: PluginNavItem[]): void {
+  _navItems.push(...items)
 }
 
-// ---------------------------------------------------------------------------
-// Tool provider registry
-// ---------------------------------------------------------------------------
-
-export function registerToolProviders(provs: PluginToolProvider[]): void {
-  _toolProviders.push(...provs)
+export function getNavItems(): PluginNavItem[] {
+  return _navItems
 }
 
-export function getPluginToolProviders(): PluginToolProvider[] {
-  return _toolProviders
+export function registerIntegrations(defs: PluginIntegrationDef[]): void {
+  _integrations.push(...defs)
+}
+
+export function getIntegrations(): PluginIntegrationDef[] {
+  return _integrations
+}
+
+/**
+ * Register a full plugin object
+ */
+export function registerPlugin(plugin: MissionControlPlugin): void {
+  if (_registeredPlugins.has(plugin.metadata.id)) {
+    console.warn(`Plugin with ID "${plugin.metadata.id}" is already registered.`)
+    return
+  }
+  _registeredPlugins.set(plugin.metadata.id, plugin)
+}
+
+export function getRegisteredPlugins(): MissionControlPlugin[] {
+  return Array.from(_registeredPlugins.values())
 }

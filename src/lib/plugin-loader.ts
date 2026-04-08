@@ -1,15 +1,28 @@
 /**
  * Plugin Loader
  *
- * Simple explicit loader following the initPro() pattern.
- * Plugins register via direct import + init() call.
- *
- * Dynamic MC_PLUGINS env-based loading can be added later.
+ * Implements a dynamic registration pattern where plugins provide
+ * metadata and an init interface.
  */
+import { initCorePanels } from './core-panels'
+import { registerPlugin, getRegisteredPlugins } from './plugins'
+import { JulesPlugin } from '@/plugins/jules-clone'
 
 export function loadPlugins(): void {
-  // Plugins register via direct import + init() call.
-  // Example:
-  //   import { initHyperbrowserPlugin } from '@/plugins/hyperbrowser'
-  //   initHyperbrowserPlugin()
+  // 1. Register core system panels (non-plugin)
+  initCorePanels()
+
+  // 2. Register available plugins
+  registerPlugin(JulesPlugin)
+
+  // 3. Initialize all registered plugins
+  const plugins = getRegisteredPlugins()
+  for (const plugin of plugins) {
+    try {
+      plugin.init()
+      console.log(`Plugin "${plugin.metadata.name}" (v${plugin.metadata.version}) initialized.`)
+    } catch (err) {
+      console.error(`Failed to initialize plugin "${plugin.metadata.id}":`, err)
+    }
+  }
 }
