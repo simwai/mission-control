@@ -6,7 +6,7 @@ import { validateBody, createAgentSchema } from '@/lib/validation';
 import { AgentService } from '@/lib/services/agent-service';
 
 /**
- * GET /api/agents - List all agents with optional filtering (Service Layer)
+ * GET /api/agents - List all agents with optional filtering (using Service Layer & DBService)
  */
 export async function GET(request: NextRequest) {
   const auth = requireRole(request, 'viewer')
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * POST /api/agents - Create a new agent (Service Layer)
+ * POST /api/agents - Create a new agent (using Service Layer)
  */
 export async function POST(request: NextRequest) {
   const auth = requireRole(request, 'operator');
