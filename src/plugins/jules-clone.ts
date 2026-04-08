@@ -2,7 +2,7 @@
  * Jules Clone Plugin
  * Implements high-autonomy coding workflows.
  */
-import { registerPanel, registerNavItems } from '@/lib/plugins'
+import { registerPanel, registerNavItems, MissionControlPlugin } from '@/lib/plugins'
 import { createElement } from 'react'
 import { useMissionControl } from '@/store'
 
@@ -29,19 +29,26 @@ function JulesDashboard() {
   )
 }
 
-export function initJulesPlugin() {
-  // 1. Register UI
-  registerPanel('jules', JulesDashboard)
+export const JulesPlugin: MissionControlPlugin = {
+  metadata: {
+    id: 'jules',
+    name: 'Jules AI Developer',
+    version: '1.0.0',
+    description: 'Autonomous coding workflow and dashboard extension.',
+    author: 'Builderz Labs'
+  },
+  init: () => {
+    // Register UI
+    registerPanel('jules', JulesDashboard)
 
-  // 2. Register Navigation
-  registerNavItems([
-    {
-      id: 'jules',
-      label: 'Jules AI',
-      groupId: 'automate',
-      icon: '🧪'
-    }
-  ])
-
-  console.log('Jules Plugin initialized')
+    // Register Navigation
+    registerNavItems([
+      {
+        id: 'jules',
+        label: 'Jules AI',
+        groupId: 'automate',
+        icon: '🧪'
+      }
+    ])
+  }
 }

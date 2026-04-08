@@ -3,6 +3,19 @@
  */
 import type { ComponentType } from 'react'
 
+export interface PluginMetadata {
+  id: string
+  name: string
+  version: string
+  description?: string
+  author?: string
+}
+
+export interface MissionControlPlugin {
+  metadata: PluginMetadata
+  init: () => void | Promise<void>
+}
+
 export interface PluginIntegrationDef {
   id: string
   name: string
@@ -23,6 +36,7 @@ export interface PluginNavItem {
 const _integrations: PluginIntegrationDef[] = []
 const _navItems: PluginNavItem[] = []
 const _panels: Map<string, ComponentType> = new Map()
+const _registeredPlugins: Map<string, MissionControlPlugin> = new Map()
 
 export function registerPanel(id: string, component: ComponentType): void {
   _panels.set(id, component)
@@ -46,4 +60,19 @@ export function registerIntegrations(defs: PluginIntegrationDef[]): void {
 
 export function getIntegrations(): PluginIntegrationDef[] {
   return _integrations
+}
+
+/**
+ * Register a full plugin object
+ */
+export function registerPlugin(plugin: MissionControlPlugin): void {
+  if (_registeredPlugins.has(plugin.metadata.id)) {
+    console.warn(`Plugin with ID "${plugin.metadata.id}" is already registered.`)
+    return
+  }
+  _registeredPlugins.set(plugin.metadata.id, plugin)
+}
+
+export function getRegisteredPlugins(): MissionControlPlugin[] {
+  return Array.from(_registeredPlugins.values())
 }
