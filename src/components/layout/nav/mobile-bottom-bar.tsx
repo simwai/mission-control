@@ -36,7 +36,7 @@ export function MobileBottomBar({ activeTab, navigateToPanel, groups, items }: {
           {priorityItems.map((item) => (
             <Button
               key={item.id}
-              variant={activeTab === item.id ? 'navActive' : 'nav'}
+              variant={activeTab === item.id ? 'navMobileActive' : 'navMobile'}
               onClick={() => navigateToPanel(item.id)}
             >
               <div className="w-5 h-5">{item.icon}</div>
@@ -44,7 +44,7 @@ export function MobileBottomBar({ activeTab, navigateToPanel, groups, items }: {
             </Button>
           ))}
           <Button
-            variant={moreIsActive ? 'navActive' : 'nav'}
+            variant={moreIsActive ? 'navMobileActive' : 'navMobile'}
             onClick={() => setSheetOpen(true)}
             className="relative"
           >
@@ -112,7 +112,7 @@ function MobileBottomSheet({ open, onClose, activeTab, navigateToPanel, groups }
                 {group.items.flatMap(i => i.children ? i.children : [i]).map((item) => (
                   <Button
                     key={item.id}
-                    variant={activeTab === item.id ? 'navActive' : 'nav'}
+                    variant={activeTab === item.id ? 'navMobileActive' : 'navMobile'}
                     onClick={() => { navigateToPanel(item.id); handleClose() }}
                   >
                     <div className="w-5 h-5 shrink-0">{item.icon}</div>

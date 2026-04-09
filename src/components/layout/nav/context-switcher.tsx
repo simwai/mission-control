@@ -5,12 +5,11 @@ import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { useMissionControl } from '@/store'
+import { cn } from '@/lib/utils'
 
 export function ContextSwitcher({ currentUser, isAdmin, isLocal, isConnected, tenants, osUsers, activeTenant, onSwitchTenant, projects, activeProject, onSwitchProject, expanded, defaultOrgName, navigateToPanel, fetchTenants, fetchOsUsers, interfaceMode, setInterfaceMode, activeTab }: any) {
   const { setShowProjectManagerModal } = useMissionControl()
   const tcs = useTranslations('contextSwitcher')
-  const tn = useTranslations('nav')
-  const tc = useTranslations('common')
   const [open, setOpen] = useState(false)
 
   const userName = currentUser?.display_name || currentUser?.username || 'User'
@@ -24,16 +23,20 @@ export function ContextSwitcher({ currentUser, isAdmin, isLocal, isConnected, te
   return (
     <div className={`shrink-0 relative ${expanded ? 'px-3 pb-3' : 'flex flex-col items-center pb-3'}`}>
       <Button
-        variant="ghost"
+        variant={expanded ? 'navTrigger' : 'ghost'}
+        size={expanded ? 'md' : 'icon-lg'}
         onClick={() => setOpen(!open)}
         title={expanded ? undefined : `${userName} · ${contextLine} · ${connectionLabel}`}
-        className={`flex items-center rounded-lg ${expanded ? 'w-full gap-2.5 px-2.5 py-2 h-auto hover:bg-secondary/80 border border-transparent hover:border-border justify-start' : 'w-10 h-10 hover:bg-secondary group'}`}
+        className={cn(!expanded && 'w-10 h-10')}
       >
-        <div className={`shrink-0 rounded-full flex items-center justify-center text-[11px] font-semibold relative w-8 h-8 ${currentUser?.avatar_url ? '' : 'bg-primary/20 text-primary'}`}>
+        <div className={cn(
+          "shrink-0 rounded-full flex items-center justify-center text-[11px] font-semibold relative w-8 h-8",
+          !currentUser?.avatar_url && "bg-primary/20 text-primary"
+        )}>
           {currentUser?.avatar_url ? (
             <Image src={currentUser.avatar_url} alt="" width={32} height={32} unoptimized className="w-full h-full rounded-full object-cover" />
           ) : initials}
-          <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-card ${connectionDotClass}`} />
+          <span className={cn("absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-card", connectionDotClass)} />
         </div>
         {expanded && (
           <>
@@ -47,11 +50,13 @@ export function ContextSwitcher({ currentUser, isAdmin, isLocal, isConnected, te
           </>
         )}
       </Button>
-      {/* Popover implementation simplified for this refactor pass */}
-      {open && <div className="absolute z-50 bg-popover border border-border rounded-lg shadow-xl min-w-[220px] bottom-full mb-1 p-2">
-         <p className="text-xs p-2">Context Menu (Refactored)</p>
-         <Button size="xs" variant="ghost" onClick={() => setOpen(false)} className="w-full justify-start">Close</Button>
-      </div>}
+      {open && (
+        <div className="absolute z-50 bg-popover border border-border rounded-lg shadow-xl min-w-[220px] bottom-full mb-1 p-2">
+           <p className="text-xs font-semibold px-2 py-1">Context</p>
+           <div className="h-px bg-border my-1 mx-1" />
+           <Button size="sm" variant="ghost" onClick={() => setOpen(false)} className="w-full justify-start text-xs">Close</Button>
+        </div>
+      )}
     </div>
   )
 }

@@ -18,8 +18,12 @@ const buttonVariants = cva(
         success:
           'bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/30',
         link: 'text-primary underline-offset-4 hover:underline',
-        nav: 'flex flex-col items-center justify-center gap-0.5 px-2 py-2 rounded-lg min-w-[48px] min-h-[48px] h-auto text-muted-foreground hover:bg-secondary/50',
-        navActive: 'flex flex-col items-center justify-center gap-0.5 px-2 py-2 rounded-lg min-w-[48px] min-h-[48px] h-auto bg-primary/10 text-primary hover:bg-primary/15',
+        // Navigation Variants
+        navItem: 'w-full flex items-center gap-2 px-2 h-auto rounded-lg text-left justify-start relative text-muted-foreground hover:text-foreground hover:bg-secondary/50',
+        navItemActive: 'w-full flex items-center gap-2 px-2 h-auto rounded-lg text-left justify-start relative bg-primary/15 text-primary hover:bg-primary/20',
+        navMobile: 'flex flex-col items-center justify-center gap-0.5 px-2 py-2 rounded-lg min-w-[48px] min-h-[48px] h-auto text-muted-foreground hover:bg-secondary/50',
+        navMobileActive: 'flex flex-col items-center justify-center gap-0.5 px-2 py-2 rounded-lg min-w-[48px] min-h-[48px] h-auto bg-primary/10 text-primary hover:bg-primary/15',
+        navTrigger: 'flex items-center gap-2.5 px-2.5 py-2 h-auto rounded-lg border border-transparent hover:border-border hover:bg-secondary/80 justify-start text-left',
       },
       size: {
         xs: 'h-7 px-2 text-xs rounded',
