@@ -1,4 +1,0 @@
-[submodule "src/plugins/jules-core"]
-	path = src/plugins/jules-core
-	url = https://github.com/builderz-labs/jules-core.git
-	ignore = dirty
