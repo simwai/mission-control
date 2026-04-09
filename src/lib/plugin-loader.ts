@@ -1,6 +1,10 @@
+/**
+ * Plugin Loader
+ */
 import { initCorePanels } from './core-panels'
 import { scanAndLoadPlugins } from './plugins/scanner'
 import { pluginRegistry } from './plugins/registry'
+import { logger } from './logger'
 
 export function loadPlugins(): void {
   // 1. Initialize core system panels
@@ -12,9 +16,13 @@ export function loadPlugins(): void {
   // 3. Trigger client-side initialization
   if (typeof window !== 'undefined') {
     pluginRegistry.getAllPlugins().forEach(plugin => {
-      if (plugin.onClientInit) plugin.onClientInit()
+      try {
+        if (plugin.onClientInit) plugin.onClientInit()
+      } catch (err) {
+        logger.error(`Failed to initialize plugin client-side "${plugin.metadata.id}":`, err)
+      }
     })
   }
 
-  console.log('Plugin loading sequence complete.')
+  logger.info('Plugin loading sequence complete.')
 }

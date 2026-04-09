@@ -259,7 +259,7 @@ export class AgentService {
           ip_address: clientIpAddress,
         });
       } catch (gatewaySyncError: any) {
-        console.warn(`Agent created in MC but gateway synchronization failed: ${gatewaySyncError.message}`);
+        logger.warn(`Agent created in MC but gateway synchronization failed: ${gatewaySyncError.message}`);
       }
     }
 

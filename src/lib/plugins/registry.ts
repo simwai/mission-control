@@ -1,4 +1,5 @@
 import { MissionControlPlugin, PanelComponent, PluginNavItem } from './types'
+import { logger } from '../logger'
 
 class PluginRegistry {
   private plugins = new Map<string, MissionControlPlugin>()
@@ -7,13 +8,12 @@ class PluginRegistry {
 
   registerPlugin(plugin: MissionControlPlugin) {
     if (this.plugins.has(plugin.metadata.id)) {
-      console.warn(`Plugin ${plugin.metadata.id} is already registered.`)
+      logger.warn(`Plugin ${plugin.metadata.id} is already registered.`)
       return
     }
 
     this.plugins.set(plugin.metadata.id, plugin)
 
-    // Auto-register components and nav items if defined
     if (plugin.panels) {
       Object.entries(plugin.panels).forEach(([id, component]) => {
         this.registerPanel(id, component)

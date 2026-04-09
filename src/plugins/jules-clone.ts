@@ -2,6 +2,9 @@ import { MissionControlPlugin } from '@/lib/plugins/types'
 import { lazy } from 'react'
 import { useMissionControl } from '@/store'
 import { registerAgentTemplate } from '@/lib/agent-templates'
+import { createClientLogger } from '@/lib/client-logger'
+
+const log = createClientLogger('JulesPlugin')
 
 // Lazy loaded dashboard
 const JulesDashboard = lazy(() => import('./jules-dashboard'))
@@ -57,6 +60,6 @@ export const JulesPlugin: MissionControlPlugin = {
       }
     })
 
-    console.log('Jules Plugin: Dynamic state and template registered.')
+    log.info('Jules Plugin: Dynamic state and template registered.')
   }
 }

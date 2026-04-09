@@ -1,23 +1,21 @@
 /**
  * Plugin Scanner (Simulation)
- * In a real environment, this would use fs.readdir and dynamic imports.
- * For this sandbox, we maintain an explicit list of discoverable plugins.
  */
 import { pluginRegistry } from './registry'
+import { logger } from '../logger'
 import { JulesPlugin } from '@/plugins/jules-clone'
 
 export function scanAndLoadPlugins() {
-  // Discovery logic (represented explicitly here for sandbox compatibility)
   const discoveredPlugins = [
     JulesPlugin
   ]
 
   discoveredPlugins.forEach(plugin => {
-    pluginRegistry.register(plugin)
+    pluginRegistry.registerPlugin(plugin)
     if (typeof window === 'undefined' && plugin.onServerInit) {
       plugin.onServerInit()
     }
   })
 
-  console.log(`Discovered and registered ${discoveredPlugins.length} plugins.`)
+  logger.info(`Discovered and registered ${discoveredPlugins.length} plugins.`)
 }
