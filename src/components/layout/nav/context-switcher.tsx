@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
+import { Avatar } from '@/components/ui/avatar'
 import { useMissionControl } from '@/store'
 import { cn } from '@/lib/utils'
 
@@ -17,8 +17,8 @@ export function ContextSwitcher({ currentUser, isAdmin, isLocal, isConnected, te
   const tenantName = activeTenant?.display_name || defaultOrgName
   const projectName = activeProject?.name
   const contextLine = projectName ? `${tenantName} / ${projectName}` : tenantName
-  const connectionLabel = isLocal ? tcs('localMode') : isConnected ? tcs('connected') : tcs('disconnected')
-  const connectionDotClass = isLocal ? 'bg-void-cyan' : isConnected ? 'bg-green-500' : 'bg-red-500'
+
+  const statusMapping = isLocal ? 'local' : isConnected ? 'connected' : 'disconnected'
 
   return (
     <div className={`shrink-0 relative ${expanded ? 'px-3 pb-3' : 'flex flex-col items-center pb-3'}`}>
@@ -26,18 +26,15 @@ export function ContextSwitcher({ currentUser, isAdmin, isLocal, isConnected, te
         variant={expanded ? 'navTrigger' : 'ghost'}
         size={expanded ? 'md' : 'icon-lg'}
         onClick={() => setOpen(!open)}
-        title={expanded ? undefined : `${userName} · ${contextLine} · ${connectionLabel}`}
+        title={expanded ? undefined : `${userName} · ${contextLine}`}
         className={cn(!expanded && 'w-10 h-10')}
       >
-        <div className={cn(
-          "shrink-0 rounded-full flex items-center justify-center text-[11px] font-semibold relative w-8 h-8",
-          !currentUser?.avatar_url && "bg-primary/20 text-primary"
-        )}>
-          {currentUser?.avatar_url ? (
-            <Image src={currentUser.avatar_url} alt="" width={32} height={32} unoptimized className="w-full h-full rounded-full object-cover" />
-          ) : initials}
-          <span className={cn("absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-card", connectionDotClass)} />
-        </div>
+        <Avatar
+          src={currentUser?.avatar_url}
+          fallback={initials}
+          status={statusMapping}
+          size="md"
+        />
         {expanded && (
           <>
             <div className="flex-1 min-w-0 text-left">
