@@ -36,22 +36,17 @@ export function MobileBottomBar({ activeTab, navigateToPanel, groups, items }: {
           {priorityItems.map((item) => (
             <Button
               key={item.id}
-              variant="ghost"
+              variant={activeTab === item.id ? 'navActive' : 'nav'}
               onClick={() => navigateToPanel(item.id)}
-              className={`flex flex-col items-center justify-center gap-0.5 px-2 py-2 rounded-lg min-w-[48px] min-h-[48px] h-auto ${
-                activeTab === item.id ? 'text-primary hover:text-primary' : ''
-              }`}
             >
               <div className="w-5 h-5">{item.icon}</div>
               <span className="text-[10px] font-medium truncate">{item.label}</span>
             </Button>
           ))}
           <Button
-            variant="ghost"
+            variant={moreIsActive ? 'navActive' : 'nav'}
             onClick={() => setSheetOpen(true)}
-            className={`flex flex-col items-center justify-center gap-0.5 px-2 py-2 rounded-lg min-w-[48px] min-h-[48px] h-auto relative ${
-              moreIsActive ? 'text-primary hover:text-primary' : ''
-            }`}
+            className="relative"
           >
             <div className="w-5 h-5">
               <svg viewBox="0 0 16 16" fill="currentColor">
@@ -115,7 +110,11 @@ function MobileBottomSheet({ open, onClose, activeTab, navigateToPanel, groups }
               <div className="px-1 pt-1 pb-2"><span className="text-[10px] tracking-wider text-muted-foreground/60 font-semibold">{group.label || 'CORE'}</span></div>
               <div className="grid grid-cols-2 gap-1.5">
                 {group.items.flatMap(i => i.children ? i.children : [i]).map((item) => (
-                  <Button key={item.id} variant="ghost" onClick={() => { navigateToPanel(item.id); handleClose() }} className={`flex items-center gap-2.5 px-3 min-h-[48px] h-auto rounded-lg justify-start ${activeTab === item.id ? 'bg-primary/15 text-primary hover:bg-primary/20' : 'text-foreground'}`}>
+                  <Button
+                    key={item.id}
+                    variant={activeTab === item.id ? 'navActive' : 'nav'}
+                    onClick={() => { navigateToPanel(item.id); handleClose() }}
+                  >
                     <div className="w-5 h-5 shrink-0">{item.icon}</div>
                     <span className="text-xs font-medium truncate">{item.label}</span>
                   </Button>
