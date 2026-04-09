@@ -6,22 +6,30 @@ export interface PluginMetadata {
   version: string
   description?: string
   author?: string
+  permissions?: string[]
 }
 
 export type PanelComponent = ComponentType<any> | LazyExoticComponent<any>
 
+/**
+ * Standard Plugin Interface (Discord-style)
+ */
 export interface MissionControlPlugin {
-  metadata: PluginMetadata
-  /** Called on the server during startup */
+  readonly metadata: PluginMetadata
+
+  // Lifecycle hooks
   onServerInit?: () => void | Promise<void>
-  /** Called on the client during initialization */
   onClientInit?: () => void | Promise<void>
-  /** UI Panels provided by this plugin */
+
+  // Registration data
   panels?: Record<string, PanelComponent>
-  /** Navigation items provided by this plugin */
   navItems?: PluginNavItem[]
-  /** Extension hooks */
-  hooks?: Record<string, Function>
+
+  // Event Handlers (Observer Pattern)
+  events?: Record<string, (data: any) => void>
+
+  // Custom Commands / Tools
+  commands?: Record<string, (args: any) => Promise<any>>
 }
 
 export interface PluginNavItem {
