@@ -1,5 +1,6 @@
 /**
  * Unified Domain Entities for Mission Control
+ * Single source of truth for all domain objects.
  */
 
 export type JsonPrimitive = string | number | boolean | null
@@ -200,7 +201,7 @@ export interface StandupReport {
   overdueTasks: Task[]
 }
 
-export interface CurrentUser {
+export interface User {
   id: number
   username: string
   display_name: string
@@ -210,16 +211,79 @@ export interface CurrentUser {
   provider?: 'local' | 'google'
   email?: string | null
   avatar_url?: string | null
+  is_approved?: number
+  created_at: number
+  updated_at: number
+  last_login_at: number | null
+}
+
+export interface UserSession {
+  id: number
+  token: string
+  user_id: number
+  workspace_id: number
+  tenant_id: number
+  expires_at: number
+  created_at: number
+  ip_address: string | null
+  user_agent: string | null
 }
 
 export interface Tenant {
   id: number
   slug: string
   display_name: string
-  status: string
   linux_user: string
-  gateway_port?: number | null
+  plan_tier: string
+  status: 'pending' | 'provisioning' | 'active' | 'suspended' | 'error'
+  openclaw_home: string
+  workspace_root: string
+  gateway_port?: number
+  dashboard_port?: number
+  config?: string
+  created_by: string
   owner_gateway?: string
+  created_at: number
+  updated_at: number
+}
+
+export interface Workspace {
+  id: number
+  slug: string
+  name: string
+  tenant_id: number
+  created_at: number
+  updated_at: number
+}
+
+export interface ProvisionJob {
+  id: number
+  tenant_id: number
+  job_type: 'bootstrap' | 'update' | 'decommission'
+  status: 'queued' | 'approved' | 'running' | 'completed' | 'failed' | 'rejected' | 'cancelled'
+  dry_run: 0 | 1
+  requested_by: string
+  approved_by?: string
+  runner_host?: string
+  idempotency_key?: string
+  request_json?: string
+  plan_json?: string
+  result_json?: string
+  error_text?: string
+  started_at?: number
+  completed_at?: number
+  created_at: number
+  updated_at: number
+}
+
+export interface ProvisionEvent {
+  id: number
+  job_id: number
+  level: 'info' | 'warn' | 'error'
+  step_key?: string
+  message: string
+  data?: string
+  created_at: number
 }
 
 export interface OsUser {
@@ -345,7 +409,7 @@ export interface CronJob {
   enabled: boolean
   lastRun?: number
   nextRun?: number
-  lastStatus?: 'success' | 'error' | 'running'
+  lastStatus?: 'success' | 'error' | 'running' | 'pending'
   lastError?: string
 }
 
