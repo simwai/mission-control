@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Avatar } from '@/components/ui/avatar'
 import { useMissionControl } from '@/store'
 import { cn } from '@/lib/utils'
+import { ChevronUpIcon } from '@/components/icons'
 
 export function ContextSwitcher({ currentUser, isAdmin, isLocal, isConnected, tenants, osUsers, activeTenant, onSwitchTenant, projects, activeProject, onSwitchProject, expanded, defaultOrgName, navigateToPanel, fetchTenants, fetchOsUsers, interfaceMode, setInterfaceMode, activeTab }: any) {
   const { setShowProjectManagerModal } = useMissionControl()
@@ -41,9 +42,7 @@ export function ContextSwitcher({ currentUser, isAdmin, isLocal, isConnected, te
               <div className="text-sm font-medium text-foreground truncate leading-tight">{userName}</div>
               <div className="text-[11px] text-muted-foreground truncate leading-tight">{contextLine}</div>
             </div>
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 shrink-0 text-muted-foreground/50">
-              <polyline points="4,10 8,6 12,10" />
-            </svg>
+            <ChevronUpIcon size={14} className="shrink-0 text-muted-foreground/50" />
           </>
         )}
       </Button>

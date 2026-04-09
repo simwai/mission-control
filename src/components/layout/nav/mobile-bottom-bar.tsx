@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
+import { MoreIcon } from '@/components/icons'
 
 interface NavItem {
   id: string
@@ -48,13 +49,7 @@ export function MobileBottomBar({ activeTab, navigateToPanel, groups, items }: {
             onClick={() => setSheetOpen(true)}
             className="relative"
           >
-            <div className="w-5 h-5">
-              <svg viewBox="0 0 16 16" fill="currentColor">
-                <circle cx="4" cy="8" r="1.5" />
-                <circle cx="8" cy="8" r="1.5" />
-                <circle cx="12" cy="8" r="1.5" />
-              </svg>
-            </div>
+            <MoreIcon size={20} />
             <span className="text-[10px] font-medium">{tn('more')}</span>
             {moreIsActive && (
               <span className="absolute top-1.5 right-2.5 w-1.5 h-1.5 rounded-full bg-primary" />

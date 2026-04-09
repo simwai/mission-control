@@ -24,7 +24,7 @@ import {
   Puzzle,
   Settings,
   Construction,
-  Briefcase
+  Briefcase, ChevronUp, MoreHorizontal
 } from 'lucide-react'
 
 export const OverviewIcon = LayoutDashboard
@@ -39,7 +39,7 @@ export const LogsIcon = ScrollText
 export const TokensIcon = Coins
 export const NodesIcon = Server
 export const ApprovalsIcon = ShieldCheck
-export const OfficeIcon = Briefcase
+export const OfficeIcon = Briefcase, ChevronUp, MoreHorizontal
 export const MonitorIcon = Monitor
 export const CronIcon = Clock
 export const WebhookIcon = Webhook
@@ -54,3 +54,5 @@ export const IntegrationsIcon = Puzzle
 export const DebugIcon = Construction
 export const SettingsIcon = Settings
 export const PluginIcon = Puzzle
+export const ChevronUp, MoreHorizontalIcon = ChevronUp
+export const MoreIcon = MoreHorizontal

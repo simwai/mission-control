@@ -81,7 +81,7 @@ export function NavRail() {
           </div>
           {sidebarExpanded && <span className="text-sm font-semibold truncate flex-1">Mission Control</span>}
           <Button variant="ghost" size="icon-xs" onClick={toggleSidebar}>
-            <Icons.OverviewIcon size={16} className={sidebarExpanded ? "rotate-180" : ""} />
+            <Icons.ChevronUpIcon size={16} className={sidebarExpanded ? "rotate-90" : "rotate-270"} />
           </Button>
         </div>
 
