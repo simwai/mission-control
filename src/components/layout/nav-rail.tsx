@@ -1,12 +1,10 @@
 'use client'
 
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { useMissionControl } from '@/store'
-import { useNavigateToPanel, usePrefetchPanel } from '@/lib/navigation'
+import { useNavigateToPanel } from '@/lib/navigation'
 import { Button } from '@/components/ui/button'
-import { APP_VERSION } from '@/lib/version'
 import { pluginRegistry } from '@/lib/plugins'
 import { NavButton } from './nav/nav-button'
 import { MobileBottomBar } from './nav/mobile-bottom-bar'
@@ -32,35 +30,33 @@ const navGroups: NavGroup[] = [
   {
     id: 'core',
     items: [
-      { id: 'overview', label: 'Overview', icon: <Icons.OverviewIcon />, priority: true, essential: true },
-      { id: 'agents', label: 'Agents', icon: <Icons.AgentsIcon />, priority: true, essential: true },
-      { id: 'tasks', label: 'Tasks', icon: <Icons.TasksIcon />, priority: true, essential: true },
-      { id: 'chat', label: 'Chat', icon: <Icons.ChatIcon />, priority: false, essential: true },
-      { id: 'channels', label: 'Channels', icon: <Icons.ChannelsIcon />, priority: false },
-      { id: 'skills', label: 'Skills', icon: <Icons.SkillsIcon />, priority: false },
-      { id: 'memory', label: 'Memory', icon: <Icons.MemoryIcon />, priority: false },
+      { id: 'overview', label: 'Overview', icon: <Icons.OverviewIcon size={18} />, priority: true, essential: true },
+      { id: 'agents', label: 'Agents', icon: <Icons.AgentsIcon size={18} />, priority: true, essential: true },
+      { id: 'tasks', label: 'Tasks', icon: <Icons.TasksIcon size={18} />, priority: true, essential: true },
+      { id: 'chat', label: 'Chat', icon: <Icons.ChatIcon size={18} />, priority: false, essential: true },
+      { id: 'channels', label: 'Channels', icon: <Icons.ChannelsIcon size={18} />, priority: false },
+      { id: 'skills', label: 'Skills', icon: <Icons.SkillsIcon size={18} />, priority: false },
+      { id: 'memory', label: 'Memory', icon: <Icons.MemoryIcon size={18} />, priority: false },
     ],
   },
   {
     id: 'observe',
     label: 'OBSERVE',
     items: [
-      { id: 'activity', label: 'Activity', icon: <Icons.ActivityIcon />, priority: true, essential: true },
-      { id: 'logs', label: 'Logs', icon: <Icons.LogsIcon />, priority: false, essential: true },
-      { id: 'cost-tracker', label: 'Cost Tracker', icon: <Icons.TokensIcon />, priority: false },
-      { id: 'nodes', label: 'Nodes', icon: <Icons.NodesIcon />, priority: false },
-      { id: 'exec-approvals', label: 'Approvals', icon: <Icons.ApprovalsIcon />, priority: false },
-      { id: 'office', label: 'Office', icon: <Icons.OfficeIcon />, priority: false },
-      { id: 'monitor', label: 'Monitor', icon: <Icons.MonitorIcon />, priority: false },
+      { id: 'activity', label: 'Activity', icon: <Icons.ActivityIcon size={18} />, priority: true, essential: true },
+      { id: 'logs', label: 'Logs', icon: <Icons.LogsIcon size={18} />, priority: false, essential: true },
+      { id: 'cost-tracker', label: 'Cost Tracker', icon: <Icons.TokensIcon size={18} />, priority: false },
+      { id: 'nodes', label: 'Nodes', icon: <Icons.NodesIcon size={18} />, priority: false },
+      { id: 'exec-approvals', label: 'Approvals', icon: <Icons.ApprovalsIcon size={18} />, priority: false },
+      { id: 'office', label: 'Office', icon: <Icons.OfficeIcon size={18} />, priority: false },
+      { id: 'monitor', label: 'Monitor', icon: <Icons.MonitorIcon size={18} />, priority: false },
     ],
   },
 ]
 
 export function NavRail() {
-  const { activeTab, connection, dashboardMode, currentUser, activeTenant, tenants, osUsers, setActiveTenant, fetchTenants, fetchOsUsers, activeProject, projects, setActiveProject, fetchProjects, sidebarExpanded, collapsedGroups, toggleSidebar, toggleGroup, defaultOrgName, interfaceMode, setInterfaceMode } = useMissionControl()
+  const { activeTab, connection, dashboardMode, currentUser, activeTenant, tenants, osUsers, setActiveTenant, fetchTenants, fetchOsUsers, activeProject, projects, setActiveProject, fetchProjects, sidebarExpanded, toggleSidebar, defaultOrgName, interfaceMode, setInterfaceMode } = useMissionControl()
   const navigateToPanel = useNavigateToPanel()
-  const prefetchPanel = usePrefetchPanel()
-  const tn = useTranslations('nav')
   const isLocal = dashboardMode === 'local'
   const isAdmin = currentUser?.role === 'admin'
 
@@ -85,9 +81,7 @@ export function NavRail() {
           </div>
           {sidebarExpanded && <span className="text-sm font-semibold truncate flex-1">Mission Control</span>}
           <Button variant="ghost" size="icon-xs" onClick={toggleSidebar}>
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" className="w-4 h-4">
-              <polyline points={sidebarExpanded ? "10,3 5,8 10,13" : "6,3 11,8 6,13"} />
-            </svg>
+            <Icons.OverviewIcon size={16} className={sidebarExpanded ? "rotate-180" : ""} />
           </Button>
         </div>
 
