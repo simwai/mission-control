@@ -6,11 +6,12 @@ import { Button } from '@/components/ui/button'
 import { Avatar } from '@/components/ui/avatar'
 import { useMissionControl } from '@/store'
 import { cn } from '@/lib/utils'
-import { ChevronUpIcon } from '@/components/icons'
+import { ChevronUpIcon, SettingsIcon, ActivityIcon } from '@/components/icons'
 
 export function ContextSwitcher({ currentUser, isAdmin, isLocal, isConnected, tenants, osUsers, activeTenant, onSwitchTenant, projects, activeProject, onSwitchProject, expanded, defaultOrgName, navigateToPanel, fetchTenants, fetchOsUsers, interfaceMode, setInterfaceMode, activeTab }: any) {
   const { setShowProjectManagerModal } = useMissionControl()
   const tcs = useTranslations('contextSwitcher')
+  const tn = useTranslations('nav')
   const [open, setOpen] = useState(false)
 
   const userName = currentUser?.display_name || currentUser?.username || 'User'
@@ -46,12 +47,52 @@ export function ContextSwitcher({ currentUser, isAdmin, isLocal, isConnected, te
           </>
         )}
       </Button>
+
       {open && (
-        <div className="absolute z-50 bg-popover border border-border rounded-lg shadow-xl min-w-[220px] bottom-full mb-1 p-2">
-           <p className="text-xs font-semibold px-2 py-1">Context</p>
-           <div className="h-px bg-border my-1 mx-1" />
-           <Button size="sm" variant="ghost" onClick={() => setOpen(false)} className="w-full justify-start text-xs">Close</Button>
-        </div>
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <div className={cn(
+            "absolute z-50 bg-popover border border-border rounded-lg shadow-xl min-w-[220px] bottom-full mb-1",
+            expanded ? "left-0 right-0" : "left-full ml-2"
+          )}>
+            <div className="p-3 border-b border-border">
+              <p className="text-sm font-semibold truncate">{userName}</p>
+              <p className="text-[10px] text-muted-foreground truncate uppercase tracking-wider">{currentUser?.role || 'User'}</p>
+            </div>
+
+            <div className="p-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start gap-2 text-xs"
+                onClick={() => { navigateToPanel('settings'); setOpen(false) }}
+              >
+                <SettingsIcon size={14} />
+                {tn('settings')}
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start gap-2 text-xs"
+                onClick={() => { navigateToPanel('activity'); setOpen(false) }}
+              >
+                <ActivityIcon size={14} />
+                {tn('activity')}
+              </Button>
+            </div>
+
+            <div className="p-1 border-t border-border">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start text-xs text-destructive hover:text-destructive hover:bg-destructive/10"
+                onClick={() => setOpen(false)}
+              >
+                Sign Out (Refactored)
+              </Button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   )

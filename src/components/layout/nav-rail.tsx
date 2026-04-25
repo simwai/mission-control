@@ -52,6 +52,30 @@ const navGroups: NavGroup[] = [
       { id: 'monitor', label: 'Monitor', icon: <Icons.MonitorIcon size={18} />, priority: false },
     ],
   },
+  {
+    id: 'automate',
+    label: 'AUTOMATE',
+    items: [
+      { id: 'cron', label: 'Cron', icon: <Icons.CronIcon size={18} />, priority: false },
+      { id: 'webhooks', label: 'Webhooks', icon: <Icons.WebhookIcon size={18} />, priority: false },
+      { id: 'alerts', label: 'Alerts', icon: <Icons.AlertIcon size={18} />, priority: false },
+      { id: 'github', label: 'GitHub', icon: <Icons.GitHubIcon size={18} />, priority: false },
+    ],
+  },
+  {
+    id: 'admin',
+    label: 'ADMIN',
+    items: [
+      { id: 'security', label: 'Security', icon: <Icons.SecurityIcon size={18} />, priority: false },
+      { id: 'users', label: 'Users', icon: <Icons.UsersIcon size={18} />, priority: false },
+      { id: 'audit', label: 'Audit', icon: <Icons.AuditIcon size={18} />, priority: false },
+      { id: 'gateways', label: 'Gateways', icon: <Icons.GatewaysIcon size={18} />, priority: false },
+      { id: 'gateway-config', label: 'Config', icon: <Icons.GatewayConfigIcon size={18} />, priority: false },
+      { id: 'integrations', label: 'Integrations', icon: <Icons.IntegrationsIcon size={18} />, priority: false },
+      { id: 'debug', label: 'Debug', icon: <Icons.DebugIcon size={18} />, priority: false },
+      { id: 'settings', label: 'Settings', icon: <Icons.SettingsIcon size={18} />, priority: false, essential: true },
+    ],
+  },
 ]
 
 export function NavRail() {
@@ -88,6 +112,11 @@ export function NavRail() {
         <div className="flex-1 overflow-y-auto py-1">
           {mergedGroups.map((group) => (
             <div key={group.id} className="px-2 py-1">
+              {sidebarExpanded && group.label && (
+                <div className="px-3 mt-3 mb-1">
+                  <span className="text-[10px] tracking-wider text-muted-foreground/60 font-semibold uppercase">{group.label}</span>
+                </div>
+              )}
               {group.items.map(item => (
                 <NavButton key={item.id} item={item} active={activeTab === item.id} expanded={sidebarExpanded} onClick={() => navigateToPanel(item.id)} />
               ))}
